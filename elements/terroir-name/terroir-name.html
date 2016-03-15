@@ -1,0 +1,68 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<dom-module id="terroir-name">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      h2  img{
+        width:40px;    height: auto; float: right;  padding: 10px 10px 10px 0px;
+      }
+      h2  {
+        color: white; font-family: Helvetica      }
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
+    </style>
+
+    <h2 class="page-title">  {{ tname }} <img src="/images/ic_my_location_48px-128.png"></h2>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+
+      Polymer({
+        is: 'terroir-name',
+
+        properties: {
+          tname: {
+            type: String,
+            value: 'undefined',
+            notify: true
+          }
+        },
+        ready: function (){
+
+          $.ajax({
+            url: "http://localhost:3000/terroirs/getterroirinfo",
+            dataType: 'json',
+            success: function (data) {
+              this.tname=data.terroirname;
+
+            }.bind(this),
+            error: function (xhr, status, err) {
+              console.log("didnt connect")
+              console.error(this.props.url, status, err.toString());
+            }.bind(this)
+          });
+        }
+      });
+    })();
+  </script>
+</dom-module>
